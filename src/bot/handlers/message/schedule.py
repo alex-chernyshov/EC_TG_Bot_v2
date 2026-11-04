@@ -50,6 +50,11 @@ async def handle_schedule(update: Update, context: ContextTypes.DEFAULT_TYPE) ->
         await update.message.reply_text(langpack.MSG_SCHEDULE_UNAVAILABLE, reply_markup=keyboard)
         return
 
+    log.info(
+        f"Retrieved latest [DTEK {group}] schedule day={schedule.day.isoformat()}, "
+        f"site_updated={schedule.site_updated}, date_fetched={schedule.date_fetched.isoformat()}"
+    )
+
     intervals = outage_intervals(schedule.hours)
     lines = [f"{langpack.MSG_SCHEDULE_TITLE} {schedule.day:%d.%m.%Y} ({langpack.WORD_GROUP} {group})", ""]
     if intervals:
