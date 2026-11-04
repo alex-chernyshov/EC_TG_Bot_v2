@@ -9,7 +9,7 @@ class UKLangPack(BaseLangPack):
     BTN_REPORT_ERROR = "🆘 Повідомити про помилку 🆘"
 
     OPT_NIGHT_SOUND_ON = "🔊 Зі звуком вночі"
-    OPT_NIGHT_SOUND_OFF = "🔇 Беззвучно вночі (без звуку)"
+    OPT_NIGHT_SOUND_OFF = "🔇 Тихо вночі (без звуку)"
     INLINE_BTN_YES = "Так"
     INLINE_BTN_NO = "Ні"
 

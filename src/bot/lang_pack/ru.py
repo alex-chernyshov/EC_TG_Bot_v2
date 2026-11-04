@@ -9,7 +9,7 @@ class RULangPack(BaseLangPack):
     BTN_REPORT_ERROR = "🆘 Сообщить об ошибке 🆘"
 
     OPT_NIGHT_SOUND_ON = "🔊 Со звуком ночью"
-    OPT_NIGHT_SOUND_OFF = "🔇 Беззвучно ночью (без звука)"
+    OPT_NIGHT_SOUND_OFF = "🔇 Тихо ночью (без звука)"
     INLINE_BTN_YES = "Да"
     INLINE_BTN_NO = "Нет"
 
