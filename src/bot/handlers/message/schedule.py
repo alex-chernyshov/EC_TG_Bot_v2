@@ -1,14 +1,16 @@
-import html
 import os
+from datetime import datetime
 
+from sqlalchemy import desc, select
 from telegram import Update
-from telegram.constants import ParseMode
 from telegram.ext import ContextTypes
 
+from src.bot.constants import KYIV_TZ
 from src.bot.keyboards import get_main_keyboard
 from src.bot.lang_pack.base import BaseLangPack
 from src.bot.utils import get_user_identity_from_update, button_rate_limited, registered_only
-from src.dtek import get_schedule
+from src.db.models import DtekSchedule
+from src.dtek import outage_intervals
 from src.logger.main import logger
 
 
@@ -20,7 +22,6 @@ async def handle_schedule(update: Update, context: ContextTypes.DEFAULT_TYPE) ->
         update.effective_user.language_code
     )
     keyboard = get_main_keyboard(langpack)
-
     log = logger.bind(username=u_identity)
 
     group = os.getenv("DTEK_GROUP")
@@ -31,20 +32,30 @@ async def handle_schedule(update: Update, context: ContextTypes.DEFAULT_TYPE) ->
 
     log.info("📅 User requested schedule")
 
-    try:
-        schedule = await get_schedule(group, log)
-    except Exception:
-        log.exception("Failed to fetch DTEK schedule")
+    # Latest day up to today: if the scheduler couldn't fetch today's data yet, the last known day is shown
+    # (the title carries its date).
+    today = datetime.now(KYIV_TZ).date()
+    session_factory = context.application.bot_data["session_factory"]
+    async with session_factory() as session:
+        result = await session.execute(
+            select(DtekSchedule)
+            .where(DtekSchedule.group_code == group, DtekSchedule.day <= today)
+            .order_by(desc(DtekSchedule.day))
+            .limit(1)
+        )
+        schedule = result.scalar_one_or_none()
+
+    if schedule is None:
+        log.warning(f"No DTEK schedule in DB for group={group}")
         await update.message.reply_text(langpack.MSG_SCHEDULE_UNAVAILABLE, reply_markup=keyboard)
         return
 
+    intervals = outage_intervals(schedule.hours)
     lines = [f"{langpack.MSG_SCHEDULE_TITLE} {schedule.day:%d.%m.%Y} ({langpack.WORD_GROUP} {group})", ""]
-    if schedule.intervals:
-        lines += [f"🪫 {start} – {end}" for start, end in schedule.intervals]
+    if intervals:
+        lines += [f"🪫 {start} – {end}" for start, end in intervals]
     else:
         lines.append(langpack.MSG_SCHEDULE_NO_OUTAGES)
-    lines += ["", f"{langpack.MSG_SCHEDULE_UPDATED} {schedule.updated}"]
+    lines += ["", f"{langpack.MSG_SCHEDULE_UPDATED} {schedule.site_updated}"]
 
-    body = html.escape("\n".join(lines))
-    text = f"{body}\n\n<i>{html.escape(langpack.MSG_SCHEDULE_SOURCE)}</i>"
-    await update.message.reply_text(text, reply_markup=keyboard, parse_mode=ParseMode.HTML)
+    await update.message.reply_text("\n".join(lines), reply_markup=keyboard)

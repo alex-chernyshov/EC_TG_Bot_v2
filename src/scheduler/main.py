@@ -10,6 +10,7 @@ from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_asyn
 from src.db.models import Status, Heartbeat
 from src.enums import Label
 from src.logger.main import logger
+from src.scheduler.dtek_job import run_dtek_loop
 from src.utils import get_database_url
 
 LAST_SEEN_TIMESTAMP = None
@@ -88,12 +89,17 @@ async def run_polling_loop() -> None:
     engine = create_async_engine(
         get_database_url(),
         pool_pre_ping=True,
-        pool_size=1,
+        pool_size=2,  # heartbeat loop + DTEK refresh task
         max_overflow=0,
     )
     session_factory = async_sessionmaker(engine, expire_on_commit=False)
 
     logger.info(f"Started polling every {interval_s:.1f}s")
+    dtek_task = None
+    if os.getenv("DTEK_PARSE_ENABLED", "").strip().lower() in {"1", "true", "yes", "on"}:
+        dtek_task = asyncio.create_task(run_dtek_loop(session_factory))
+    else:
+        logger.info("DTEK_PARSE_ENABLED is not set, DTEK schedule refresh is off")
     try:
         while True:
             try:
@@ -103,6 +109,8 @@ async def run_polling_loop() -> None:
                 logger.error(f"Poll error: {exc!r}")
             await asyncio.sleep(interval_s)
     finally:
+        if dtek_task:
+            dtek_task.cancel()
         await engine.dispose()
 
 
