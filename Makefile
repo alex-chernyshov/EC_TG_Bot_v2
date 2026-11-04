@@ -58,14 +58,9 @@ deploy:
 	docker compose run --rm bot alembic upgrade head
 	docker compose up -d
 
+# Also the first-time setup: migrations build the schema from an empty database.
 docker_migrate:
 	docker compose run --rm bot alembic upgrade head
-
-# First-time only: create tables and mark them as the current Alembic revision.
-docker_init_db:
-	docker compose up -d postgres
-	docker compose run --rm bot python entrypoints/init_db.py
-	docker compose run --rm bot alembic stamp head
 
 ps:
 	docker compose ps

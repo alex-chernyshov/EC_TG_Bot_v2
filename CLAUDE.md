@@ -20,7 +20,7 @@ make migrate         # alembic upgrade head
 make downgrade       # alembic downgrade -1
 
 # Droplet (docker-compose.yml)
-make docker_init_db  # first time: postgres up, init_db.py, alembic stamp head
+make docker_migrate  # alembic upgrade head in a container (also the first-time schema setup)
 make docker_build    # docker compose up -d --build (postgres, bot, scheduler, pi_server)
 make deploy          # git pull, build, alembic upgrade head, up -d
 make logs_compact    # follow bot/scheduler/pi_server logs
@@ -70,7 +70,7 @@ Four independent processes share one Postgres database. They communicate only th
 
 ### Database
 
-Models are in `src/db/models/` and re-exported via `src/db/models/__init__.py`, which Alembic's `env.py` imports for autogenerate. Schema changes go through Alembic migrations in `alembic/versions/`. `init_db` and `refresh_db` use `create_all`/`drop_all` directly and bypass Alembic.
+Models are in `src/db/models/` and re-exported via `src/db/models/__init__.py`, which Alembic's `env.py` imports for autogenerate. Schema changes go through Alembic migrations in `alembic/versions/`. `init_db` and `refresh_db` use `create_all`/`drop_all` directly and bypass Alembic (no `alembic_version` row, so follow with `alembic stamp head`). History was squashed into a single baseline, `554dc3bb3721_init`, which builds the full schema from an empty DB. Prefer `alembic upgrade head` for new databases.
 
 ### Logging
 

@@ -88,14 +88,34 @@ firewall. Postgres stays bound to `127.0.0.1`.
 ```bash
 git clone <repo-url> EC_TG_Bot_v2 && cd EC_TG_Bot_v2
 cp .env_example .env && nano .env   # fill droplet + shared sections
-make docker_init_db                 # start postgres, create tables, stamp Alembic head
+make docker_migrate                 # start postgres, build the schema with `alembic upgrade head`
 make docker_build                   # build and start everything
 make logs_compact
 ```
 
-> **Already ran `init_db.py` by hand?** `create_all` doesn't record an Alembic revision, so the first
-> `alembic upgrade head` would try to recreate existing tables. Run this once:
-> `docker compose run --rm bot alembic stamp head`
+> **Created the tables with `init_db.py` instead?** `create_all` builds the same schema but doesn't create the
+> `alembic_version` table, so the next `alembic upgrade head` would try to create the tables again. Mark the DB as
+> up to date once: `docker compose run --rm bot alembic stamp head`
+>
+> A DB stamped with a pre-squash revision (`8d30a0731ba0`, `eec23e5109cc`, `d5825fe9e5af`) fails with
+> "Can't locate revision". If its schema is current, re-stamp it: `docker compose run --rm bot alembic stamp --purge head`
+
+### Restoring data from a dump
+
+`db_dumps/<date>/*.sql` are data-only `INSERT` dumps. Their columns match the current schema. Load them into a
+database already at Alembic head. Skip `alembic_version.sql`: it points at a revision from before the migrations were
+squashed, which no longer exists. Then move the id sequences past the restored rows, or the next insert fails with a
+duplicate key:
+
+```bash
+for t in users statuses heartbeat; do
+  docker compose exec -T postgres sh -c 'psql -U "$POSTGRES_USER" -d "$POSTGRES_DB" -v ON_ERROR_STOP=1' < db_dumps/15_05_2026/$t.sql
+done
+docker compose exec -T postgres sh -c 'psql -U "$POSTGRES_USER" -d "$POSTGRES_DB"' <<'SQL'
+SELECT setval(pg_get_serial_sequence('statuses', 'id'), COALESCE(MAX(id), 1)) FROM statuses;
+SELECT setval(pg_get_serial_sequence('heartbeat', 'id'), COALESCE(MAX(id), 1)) FROM heartbeat;
+SQL
+```
 
 ### Updating
 
@@ -189,7 +209,7 @@ Requires [uv](https://docs.astral.sh/uv/). It installs the right Python (from `.
 uv sync              # creates .venv with all dependency groups
 cp .env_example .env
 docker compose up -d postgres
-make init_db         # or: make migrate
+make migrate         # alembic upgrade head
 make run_pi_server   # / run_scheduler / run_bot / run_pi_client
 ```
 
