@@ -21,6 +21,7 @@ from src.bot.handlers.callback_query.notifications import handle_notification_ch
 from src.bot.handlers.command.msg_all import msg_all
 from src.bot.handlers.command.start import start
 from src.bot.handlers.message.gen_status import handle_gen_status
+from src.bot.handlers.message.schedule import handle_schedule
 from src.bot.handlers.message.power_status import handle_power_status
 from src.bot.handlers.message.report_error import handle_report_error
 from src.bot.handlers.message.settings import handle_settings
@@ -113,6 +114,12 @@ def start_bot() -> None:
         MessageHandler(
             filters.Regex(build_button_pattern("BTN_GEN_STATUS", language_list)),
             handle_gen_status,
+        )
+    )
+    app.add_handler(
+        MessageHandler(
+            filters.Regex(build_button_pattern("BTN_SCHEDULE", language_list)),
+            handle_schedule,
         )
     )
     app.add_handler(

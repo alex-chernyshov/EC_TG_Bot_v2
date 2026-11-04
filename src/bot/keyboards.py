@@ -8,6 +8,7 @@ def get_main_keyboard(langpack: BaseLangPack) -> ReplyKeyboardMarkup:
     keyboard = [
         [KeyboardButton(langpack.BTN_POWER_STATUS, api_kwargs={"style": "primary"})],
         [KeyboardButton(langpack.BTN_GEN_STATUS, api_kwargs={"style": "primary"})],
+        [KeyboardButton(langpack.BTN_SCHEDULE, api_kwargs={"style": "primary"})],
         [
             KeyboardButton(langpack.BTN_SETTINGS),
             KeyboardButton(langpack.BTN_REPORT_ERROR, api_kwargs={"style": "danger"}),

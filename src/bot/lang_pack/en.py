@@ -4,6 +4,7 @@ from src.bot.lang_pack.base import BaseLangPack
 class ENLangPack(BaseLangPack):
     BTN_POWER_STATUS = "💡 Power 💡"
     BTN_GEN_STATUS = "🔋 Generator 🔋"
+    BTN_SCHEDULE = "📅 Schedule 📅"
     BTN_SETTINGS = "⚙️ Settings ⚙️"
     BTN_REPORT_ERROR = "🆘 Report an error 🆘"
 
@@ -28,6 +29,10 @@ class ENLangPack(BaseLangPack):
     MSG_GEN_SHOULD_BE_OFF = "⚠️ _The generator is running, but according to the schedule, it should be turned *OFF*\\!_"
     MSG_GEN_SHOULD_BE_ON = "⚠️ _The generator is turned off, but according to the schedule, it should be turned *ON*\\!_"
     MSG_POWER_STATUS_NOT_AVAILABLE = "⚠️ Information is currently unavailable. Please try again later."
+    MSG_SCHEDULE_TITLE = "📅 Outages for"
+    MSG_SCHEDULE_NO_OUTAGES = "No outages scheduled ✅"
+    MSG_SCHEDULE_UPDATED = "Updated:"
+    MSG_SCHEDULE_UNAVAILABLE = "⚠️ Schedule is currently unavailable. Please try again later."
     MSG_POWER_IS_ON = "🟢 *Power is ON\\!* 🟢"
     MSG_POWER_IS_OFF = "🔴 *Power is OFF* 🔴"
     MSG_POWER_TURN_ON_TIME = "📅 Turn\\-on time"
@@ -50,6 +55,7 @@ class ENLangPack(BaseLangPack):
 
     WORD_MINUTES = "min"
     WORD_HOURS = "h"
+    WORD_GROUP = "group"
     WORD_AND = "and"
     WORD_USER = "User"
     WORD_POWER = "Power is"

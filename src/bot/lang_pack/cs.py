@@ -4,6 +4,7 @@ from src.bot.lang_pack.base import BaseLangPack
 class CSLangPack(BaseLangPack):
     BTN_POWER_STATUS = "💡 Elektřina 💡"
     BTN_GEN_STATUS = "🔋 Generátor 🔋"
+    BTN_SCHEDULE = "📅 Rozvrh 📅"
     BTN_SETTINGS = "⚙️ Nastavení ⚙️"
     BTN_REPORT_ERROR = "🆘 Nahlásit chybu 🆘"
 
@@ -30,6 +31,10 @@ class CSLangPack(BaseLangPack):
     MSG_GEN_SHOULD_BE_OFF = "⚠️ _Generátor běží, ale podle rozvrhu by měl být *VYPNUT*\\!_"
     MSG_GEN_SHOULD_BE_ON = "⚠️ _Generátor je vypnutý, ale podle rozvrhu by měl být *ZAPNUT*\\!_"
     MSG_POWER_STATUS_NOT_AVAILABLE = "⚠️ Informace jsou momentálně nedostupné. Zkuste to prosím později."
+    MSG_SCHEDULE_TITLE = "📅 Výpadky na"
+    MSG_SCHEDULE_NO_OUTAGES = "Žádné výpadky nejsou naplánovány ✅"
+    MSG_SCHEDULE_UPDATED = "Aktualizováno:"
+    MSG_SCHEDULE_UNAVAILABLE = "⚠️ Rozvrh je momentálně nedostupný. Zkuste to prosím později."
     MSG_POWER_IS_ON = "🟢 *Elektřina je ZAPNUTÁ\\!* 🟢"
     MSG_POWER_IS_OFF = "🔴 *Elektřina je VYPNUTÁ* 🔴"
     MSG_POWER_TURN_ON_TIME = "📅 Čas zapnutí"
@@ -54,6 +59,7 @@ class CSLangPack(BaseLangPack):
 
     WORD_MINUTES = "min"
     WORD_HOURS = "h"
+    WORD_GROUP = "skupina"
     WORD_AND = "a"
     WORD_USER = "Uživatel"
     WORD_POWER = "Elektřina je"

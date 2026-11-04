@@ -4,6 +4,7 @@ from src.bot.lang_pack.base import BaseLangPack
 class UKLangPack(BaseLangPack):
     BTN_POWER_STATUS = "💡 Світло 💡"
     BTN_GEN_STATUS = "🔋 Генератор 🔋"
+    BTN_SCHEDULE = "📅 Графік 📅"
     BTN_SETTINGS = "⚙️ Налаштування ⚙️"
     BTN_REPORT_ERROR = "🆘 Повідомити про помилку 🆘"
 
@@ -28,6 +29,10 @@ class UKLangPack(BaseLangPack):
     MSG_GEN_SHOULD_BE_OFF = "⚠️ _Генератор працюэ, але, згідно з розкладом, його повинні *ВИМКНУТИ*\\!_"
     MSG_GEN_SHOULD_BE_ON = "⚠️ _Генератор не працюэ, але, згідно з розкладом, його повинні *УВIМКНУТИ*\\!_"
     MSG_POWER_STATUS_NOT_AVAILABLE = "⚠️ Інформація наразі недоступна. Будь ласка, спробуйте пізніше."
+    MSG_SCHEDULE_TITLE = "📅 Відключення на"
+    MSG_SCHEDULE_NO_OUTAGES = "Відключень не заплановано ✅"
+    MSG_SCHEDULE_UPDATED = "Оновлено:"
+    MSG_SCHEDULE_UNAVAILABLE = "⚠️ Графік наразі недоступний. Будь ласка, спробуйте пізніше."
     MSG_POWER_IS_ON = "🟢 *Світло Є\\!* 🟢"
     MSG_POWER_IS_OFF = "🔴 *Світла НЕМАЄ* 🔴"
     MSG_POWER_TURN_ON_TIME = "📅 Час увімкнення"
@@ -50,6 +55,7 @@ class UKLangPack(BaseLangPack):
 
     WORD_MINUTES = "хв"
     WORD_HOURS = "г"
+    WORD_GROUP = "група"
     WORD_AND = "і"
     WORD_USER = "Користувач"
     WORD_POWER = "Світло"

@@ -4,6 +4,7 @@ from src.bot.lang_pack.base import BaseLangPack
 class RULangPack(BaseLangPack):
     BTN_POWER_STATUS = "💡 Свет 💡"
     BTN_GEN_STATUS = "🔋 Генератор 🔋"
+    BTN_SCHEDULE = "📅 График 📅"
     BTN_SETTINGS = "⚙️ Настройки ⚙️"
     BTN_REPORT_ERROR = "🆘 Сообщить об ошибке 🆘"
 
@@ -28,6 +29,10 @@ class RULangPack(BaseLangPack):
     MSG_GEN_TIME_TILL_OFF = "⏳ Согласно расписанию, до отключения:"
     MSG_GEN_TIME_TILL_ON = "⏳ Согласно расписанию, до включения:"
     MSG_POWER_STATUS_NOT_AVAILABLE = "⚠️ Информация пока недоступна. Пожалуйста, попробуйте позже."
+    MSG_SCHEDULE_TITLE = "📅 Отключения на"
+    MSG_SCHEDULE_NO_OUTAGES = "Отключений не запланировано ✅"
+    MSG_SCHEDULE_UPDATED = "Обновлено:"
+    MSG_SCHEDULE_UNAVAILABLE = "⚠️ График пока недоступен. Пожалуйста, попробуйте позже."
     MSG_POWER_IS_ON = "🟢 *Электричество ЕСТЬ\\!* 🟢"
     MSG_POWER_IS_OFF = "🔴 *Электричества НЕТ* 🔴"
     MSG_POWER_TURN_ON_TIME = "📅 Время включения"
@@ -51,6 +56,7 @@ class RULangPack(BaseLangPack):
 
     WORD_MINUTES = "мин"
     WORD_HOURS = "ч"
+    WORD_GROUP = "группа"
     WORD_AND = "и"
     WORD_USER = "Пользователь"
     WORD_POWER = "Электричество"
