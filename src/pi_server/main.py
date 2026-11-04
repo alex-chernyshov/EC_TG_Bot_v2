@@ -16,7 +16,7 @@ from src.utils import get_database_url
 HEARTBEAT_PATH = os.getenv("HEARTBEAT_PATH", "/heartbeat").strip()
 HEARTBEAT_TOKEN = os.getenv("HEARTBEAT_TOKEN", "").strip()
 
-engine = create_async_engine(get_database_url(), pool_pre_ping=True)
+engine = create_async_engine(get_database_url(), pool_pre_ping=True, pool_size=2, max_overflow=2)
 session_factory = async_sessionmaker(engine, expire_on_commit=False)
 
 auth_provider = HTTPBearer()

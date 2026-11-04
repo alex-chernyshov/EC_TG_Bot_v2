@@ -79,6 +79,8 @@ async def run_polling_loop() -> None:
     engine = create_async_engine(
         get_database_url(),
         pool_pre_ping=True,
+        pool_size=1,
+        max_overflow=0,
     )
     session_factory = async_sessionmaker(engine, expire_on_commit=False)
 

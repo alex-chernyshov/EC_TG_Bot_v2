@@ -51,6 +51,17 @@ services:
       - postgres
       - -c
       - password_encryption=scram-sha-256
+      # Small-footprint tuning: the dataset is tiny and only 3 app processes connect.
+      - -c
+      - shared_buffers=32MB
+      - -c
+      - max_connections=20
+      - -c
+      - work_mem=2MB
+      - -c
+      - maintenance_work_mem=16MB
+      - -c
+      - effective_cache_size=128MB
 
     volumes:
       - postgres_data:/var/lib/postgresql/data
@@ -63,8 +74,7 @@ services:
       retries: 10
       start_period: 30s
 
-    # Improves performance for workloads that use larger temp buffers.
-    shm_size: "256mb"
+    shm_size: "64mb"
 
     logging:
       driver: json-file

@@ -53,6 +53,8 @@ def start_bot() -> None:
     engine = create_async_engine(
         database_url,
         pool_pre_ping=True,
+        pool_size=2,
+        max_overflow=2,
     )
     session_factory = async_sessionmaker(engine, expire_on_commit=False)
     logger.info("Database session factory created successfully")
