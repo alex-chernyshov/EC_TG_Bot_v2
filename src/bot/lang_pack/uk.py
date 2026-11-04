@@ -4,7 +4,7 @@ from src.bot.lang_pack.base import BaseLangPack
 class UKLangPack(BaseLangPack):
     BTN_POWER_STATUS = "💡 Світло 💡"
     BTN_GEN_STATUS = "🔋 Генератор 🔋"
-    BTN_SCHEDULE = "📅 Графік 📅"
+    BTN_SCHEDULE = "📅 Графік ДТЕК 📅"
     BTN_SETTINGS = "⚙️ Налаштування ⚙️"
     BTN_REPORT_ERROR = "🆘 Повідомити про помилку 🆘"
 

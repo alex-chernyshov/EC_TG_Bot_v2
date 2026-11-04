@@ -4,7 +4,7 @@ from src.bot.lang_pack.base import BaseLangPack
 class ENLangPack(BaseLangPack):
     BTN_POWER_STATUS = "💡 Power 💡"
     BTN_GEN_STATUS = "🔋 Generator 🔋"
-    BTN_SCHEDULE = "📅 Schedule 📅"
+    BTN_SCHEDULE = "📅 DTEK Schedule 📅"
     BTN_SETTINGS = "⚙️ Settings ⚙️"
     BTN_REPORT_ERROR = "🆘 Report an error 🆘"
 

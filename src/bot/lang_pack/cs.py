@@ -4,7 +4,7 @@ from src.bot.lang_pack.base import BaseLangPack
 class CSLangPack(BaseLangPack):
     BTN_POWER_STATUS = "💡 Elektřina 💡"
     BTN_GEN_STATUS = "🔋 Generátor 🔋"
-    BTN_SCHEDULE = "📅 Rozvrh 📅"
+    BTN_SCHEDULE = "📅 Rozvrh DTEK 📅"
     BTN_SETTINGS = "⚙️ Nastavení ⚙️"
     BTN_REPORT_ERROR = "🆘 Nahlásit chybu 🆘"
 

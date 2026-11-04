@@ -4,7 +4,7 @@ from src.bot.lang_pack.base import BaseLangPack
 class RULangPack(BaseLangPack):
     BTN_POWER_STATUS = "💡 Свет 💡"
     BTN_GEN_STATUS = "🔋 Генератор 🔋"
-    BTN_SCHEDULE = "📅 График 📅"
+    BTN_SCHEDULE = "📅 График ДТЭК 📅"
     BTN_SETTINGS = "⚙️ Настройки ⚙️"
     BTN_REPORT_ERROR = "🆘 Сообщить об ошибке 🆘"
 
