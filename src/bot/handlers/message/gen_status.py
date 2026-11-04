@@ -15,6 +15,7 @@ from src.bot.utils import (
     get_generator_schedule_status,
     get_generator_time_to_next_switch,
     button_rate_limited,
+    registered_only,
 )
 from src.db.models import Status
 from src.enums import Label
@@ -22,6 +23,7 @@ from src.logger.main import logger
 
 
 @button_rate_limited
+@registered_only
 async def handle_gen_status(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     user = update.effective_user
     if user is None:

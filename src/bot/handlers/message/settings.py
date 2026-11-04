@@ -3,13 +3,14 @@ from telegram.ext import (
     ContextTypes,
 )
 
-from src.bot.keyboards import get_main_keyboard, get_notification_choice_keyboard
+from src.bot.keyboards import get_notification_choice_keyboard
 from src.bot.lang_pack.base import BaseLangPack
-from src.bot.utils import get_user_identity_from_update, get_user_from_db, button_rate_limited
+from src.bot.utils import get_user_identity_from_update, button_rate_limited, registered_only
 from src.logger.main import logger
 
 
 @button_rate_limited
+@registered_only
 async def handle_settings(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     """Handle 'Notification settings' button - allow user to reconfigure notification preferences."""
     user = update.effective_user
@@ -28,16 +29,6 @@ async def handle_settings(update: Update, context: ContextTypes.DEFAULT_TYPE) ->
         return
 
     logger.bind(username=u_identity).info("⚙️  User requested to reconfigure notification settings")
-
-    # Verify user exists in database
-    existing_user = await get_user_from_db(session_factory, user.id)
-    if existing_user is None:
-        logger.bind(username=u_identity).warning("User not found in DB - redirecting to /start")
-        await update.message.reply_text(
-            langpack.MSG_USER_NOT_FOUND,
-            reply_markup=get_main_keyboard(langpack),
-        )
-        return
 
     # Start the notification preference flow (reuse registration flow)
     await update.message.reply_text(

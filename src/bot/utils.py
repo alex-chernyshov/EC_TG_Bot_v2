@@ -239,3 +239,21 @@ def button_rate_limited(handler: Callable):
         await handler(update, context)
 
     return _wrapped
+
+
+def registered_only(handler: Callable):
+    """Reject requests from users missing in `users` table and ask them to run /start."""
+
+    async def _wrapped(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+        user = update.effective_user
+        if user is not None:
+            session_factory = context.application.bot_data["session_factory"]
+            if await get_user_from_db(session_factory, user.id) is None:
+                u_identity = get_user_identity_from_update(update)
+                logger.bind(username=u_identity).warning("User not found in DB - redirecting to /start")
+                langpack = context.application.bot_data["languages"].from_langcode(user.language_code)
+                await update.message.reply_text(langpack.MSG_USER_NOT_FOUND)
+                return
+        await handler(update, context)
+
+    return _wrapped
