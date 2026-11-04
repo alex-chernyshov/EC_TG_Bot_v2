@@ -68,7 +68,13 @@ async def _fetch_schedule(group: str) -> Schedule:
         resp.raise_for_status()
 
     html = resp.text
-    fact, _ = json.JSONDecoder().raw_decode(html, html.index(FACT_MARKER) + len(FACT_MARKER))
+    marker_pos = html.find(FACT_MARKER)
+    if marker_pos == -1:
+        # Typically an Incapsula anti-bot challenge stub served with HTTP 200.
+        raise RuntimeError(
+            f"DTEK page has no schedule data (status={resp.status_code}, size={len(html)}): {html[:200]!r}"
+        )
+    fact, _ = json.JSONDecoder().raw_decode(html, marker_pos + len(FACT_MARKER))
     hours = fact["data"][str(fact["today"])][f"GPV{group}"]
 
     slots = [off for h in range(1, 25) for off in OFF_HALVES[hours[str(h)]]]  # 48 half-hour slots
