@@ -8,17 +8,14 @@ class ENLangPack(BaseLangPack):
     BTN_SETTINGS = "⚙️ Settings ⚙️"
     BTN_REPORT_ERROR = "🆘 Report an error 🆘"
 
-    INLINE_BTN_NIGHT_SOUND_ON = "🔊TURN ON night sound"
-    INLINE_BTN_NIGHT_SOUND_OFF = "🔇TURN OFF night sound"
+    OPT_NIGHT_SOUND_ON = "🔊 With sound at night"
+    OPT_NIGHT_SOUND_OFF = "🔇 Silent at night (no sound)"
     INLINE_BTN_YES = "Yes"
     INLINE_BTN_NO = "No"
 
     MSG_USE_KEYBOARD = "Use the keyboard below to interact with the bot 👇"
-    MSG_NOTIFICATIONS_ON = (
-        "Great! Notifications are enabled. 🔔\n\n"
-        "Would you like to turn off the sound for night notifications "
-        "(notifications that arrive at night between 22:00 and 08:00 will be silent)?"
-    )
+    MSG_NOTIFICATIONS_ON = "Great! Notifications are enabled. 🔔\n\nChoose how night notifications (22:00–08:00) should arrive.\nIn silent mode they still arrive, just without a sound:"
+    MSG_PRESS_OPTION = "Press 1 or 2 👇"
     MSG_WELCOME_USER = "Welcome, {username}!"
     MSG_Q_ENABLE_NOTIFS = "Would you like to enable notifications (the bot will automatically send messages to the chat when the power is turned on/off)?"
     MSG_GEN_NOT_REQUIRED = "⚡️ Power is ON ⚡️\n\nGenerator not required"

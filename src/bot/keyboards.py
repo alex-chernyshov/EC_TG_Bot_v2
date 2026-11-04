@@ -18,14 +18,22 @@ def get_main_keyboard(langpack: BaseLangPack) -> ReplyKeyboardMarkup:
 
 
 def get_night_sound_choice_keyboard(langpack: BaseLangPack) -> InlineKeyboardMarkup:
-    """Get inline keyboard for night sound preference choice."""
+    """Get inline keyboard for night sound preference choice.
+
+    Buttons are numbered; the matching options are listed in the message text (see get_night_sound_options_text).
+    """
     keyboard = [
         [
-            InlineKeyboardButton(langpack.INLINE_BTN_NIGHT_SOUND_ON, callback_data="night_sound_yes"),
-            InlineKeyboardButton(langpack.INLINE_BTN_NIGHT_SOUND_OFF, callback_data="night_sound_no"),
+            InlineKeyboardButton("1️⃣", callback_data="night_sound_yes"),
+            InlineKeyboardButton("2️⃣", callback_data="night_sound_no"),
         ]
     ]
     return InlineKeyboardMarkup(keyboard)
+
+
+def get_night_sound_options_text(langpack: BaseLangPack) -> str:
+    """Numbered explanation of the night sound keyboard buttons."""
+    return f"1️⃣ {langpack.OPT_NIGHT_SOUND_ON}\n2️⃣ {langpack.OPT_NIGHT_SOUND_OFF}"
 
 
 def get_notification_choice_keyboard(langpack: BaseLangPack) -> InlineKeyboardMarkup:

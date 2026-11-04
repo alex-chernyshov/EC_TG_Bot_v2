@@ -8,17 +8,14 @@ class CSLangPack(BaseLangPack):
     BTN_SETTINGS = "⚙️ Nastavení ⚙️"
     BTN_REPORT_ERROR = "🆘 Nahlásit chybu 🆘"
 
-    INLINE_BTN_NIGHT_SOUND_ON = "🔊ZAPNOUT noční zvuk"
-    INLINE_BTN_NIGHT_SOUND_OFF = "🔇VYPNOUT noční zvuk"
+    OPT_NIGHT_SOUND_ON = "🔊 Se zvukem v noci"
+    OPT_NIGHT_SOUND_OFF = "🔇 Tiše v noci (bez zvuku)"
     INLINE_BTN_YES = "Ano"
     INLINE_BTN_NO = "Ne"
 
     MSG_USE_KEYBOARD = "Použijte klávesnici níže pro interakci s botem 👇"
-    MSG_NOTIFICATIONS_ON = (
-        "Skvělé! Oznámení jsou zapnutá. 🔔\n\n"
-        "Chcete vypnout zvuk pro noční oznámení "
-        "(oznámení, která přicházejí v noci mezi 22:00 a 08:00, budou tichá)?"
-    )
+    MSG_NOTIFICATIONS_ON = "Skvělé! Oznámení jsou zapnutá. 🔔\n\nVyberte, jak mají chodit noční oznámení (22:00–08:00).\nV tichém režimu stále dorazí, jen bez zvuku:"
+    MSG_PRESS_OPTION = "Stiskněte 1 nebo 2 👇"
     MSG_WELCOME_USER = "Vítejte, {username}!"
     MSG_Q_ENABLE_NOTIFS = (
         "Chcete zapnout oznámení (bot bude automaticky posílat zprávy do chatu, když se elektřina zapne/vypne)?"

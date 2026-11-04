@@ -4,7 +4,7 @@ from telegram.ext import (
     ContextTypes,
 )
 
-from src.bot.keyboards import get_night_sound_choice_keyboard, get_main_keyboard
+from src.bot.keyboards import get_night_sound_choice_keyboard, get_night_sound_options_text, get_main_keyboard
 from src.bot.lang_pack.base import BaseLangPack
 from src.bot.utils import (
     get_user_identity_from_query,
@@ -63,7 +63,7 @@ async def handle_notification_choice(update: Update, context: ContextTypes.DEFAU
     if notifs_enabled:
         # Ask about night notification sound
         await query.edit_message_text(
-            langpack.MSG_NOTIFICATIONS_ON,
+            f"{langpack.MSG_NOTIFICATIONS_ON}\n\n{get_night_sound_options_text(langpack)}\n\n{langpack.MSG_PRESS_OPTION}",
             reply_markup=get_night_sound_choice_keyboard(langpack),
         )
         logger.bind(username=u_identity).info("Waiting for night sound preference from user...")
