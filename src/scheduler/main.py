@@ -4,13 +4,14 @@ import time
 from typing import Optional
 from datetime import datetime, UTC
 
+from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
 
 from src.db.models import Status, Heartbeat
 from src.enums import Label
 from src.logger.main import logger
-from src.scheduler.dtek_job import run_dtek_loop
+from src.scheduler.dtek_job import add_dtek_job
 from src.utils import get_database_url
 
 LAST_SEEN_TIMESTAMP = None
@@ -83,36 +84,49 @@ async def poll_once(session_factory: async_sessionmaker[AsyncSession], interval:
                 logger.info(f"{label} device status changed: {from_v} -> {to_v}")
 
 
-async def run_polling_loop() -> None:
+async def heartbeat_job(session_factory: async_sessionmaker[AsyncSession], interval: int) -> None:
+    try:
+        await poll_once(session_factory=session_factory, interval=interval)
+    except Exception as exc:
+        logger.error(f"Poll error: {exc!r}")
+
+
+async def run_scheduler() -> None:
     interval_s = float(os.getenv("LISTEN_HEARTBEAT_INTERVAL_SECONDS", "10"))
 
     engine = create_async_engine(
         get_database_url(),
         pool_pre_ping=True,
-        pool_size=2,  # heartbeat loop + DTEK refresh task
+        pool_size=2,  # heartbeat job + DTEK refresh job
         max_overflow=0,
     )
     session_factory = async_sessionmaker(engine, expire_on_commit=False)
 
-    logger.info(f"Started polling every {interval_s:.1f}s")
-    dtek_task = None
+    # A late tick still runs (no misfire skipping); overlapping/backlogged runs collapse into one.
+    scheduler = AsyncIOScheduler(
+        timezone=UTC, job_defaults={"coalesce": True, "max_instances": 1, "misfire_grace_time": None}
+    )
+    scheduler.add_job(
+        heartbeat_job,
+        "interval",
+        seconds=interval_s,
+        kwargs={"session_factory": session_factory, "interval": int(interval_s)},
+        id="heartbeat_poll",
+        next_run_time=datetime.now(UTC),
+    )
     if os.getenv("DTEK_PARSE_ENABLED", "").strip().lower() in {"1", "true", "yes", "on"}:
-        dtek_task = asyncio.create_task(run_dtek_loop(session_factory))
+        add_dtek_job(scheduler, session_factory)
     else:
         logger.info("DTEK_PARSE_ENABLED is not set, DTEK schedule refresh is off")
+
+    scheduler.start()
+    logger.info(f"Started polling every {interval_s:.1f}s")
     try:
-        while True:
-            try:
-                await poll_once(session_factory=session_factory, interval=int(interval_s))
-            except Exception as exc:
-                # Keep the loop alive
-                logger.error(f"Poll error: {exc!r}")
-            await asyncio.sleep(interval_s)
+        await asyncio.Event().wait()
     finally:
-        if dtek_task:
-            dtek_task.cancel()
+        scheduler.shutdown(wait=False)
         await engine.dispose()
 
 
 def start_scheduler() -> None:
-    asyncio.run(run_polling_loop())
+    asyncio.run(run_scheduler())
