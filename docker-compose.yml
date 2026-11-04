@@ -91,6 +91,12 @@ services:
   scheduler:
     <<: *app
     command: ["python", "entrypoints/scheduler.py"]
+    # Overriding depends_on replaces the anchor's value, so postgres is repeated here.
+    depends_on:
+      postgres:
+        condition: service_healthy
+      pi_server:
+        condition: service_started
 
   pi_server:
     <<: *app
