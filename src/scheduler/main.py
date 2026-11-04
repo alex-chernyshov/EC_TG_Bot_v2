@@ -1,5 +1,6 @@
 import asyncio
 import os
+import time
 from typing import Optional
 from datetime import datetime, UTC
 
@@ -13,6 +14,7 @@ from src.utils import get_database_url
 
 LAST_SEEN_TIMESTAMP = None
 WAIT_TILL_MAKE_DECISION = 5
+STARTED_AT = time.monotonic()
 
 
 async def get_heartbeat(session: AsyncSession, label: str) -> Heartbeat | None:
@@ -65,6 +67,13 @@ async def poll_once(session_factory: async_sessionmaker[AsyncSession], interval:
             power_value = detect_power_value(
                 current_dt=LAST_SEEN_TIMESTAMP, heartbeat_dt=heartbeat.timestamp, interval=interval
             )
+            # After a restart (e.g. deploy) pi_server was down too, so the stored heartbeat is stale
+            # even though devices are alive. Don't declare "offline" until devices had a full window to report.
+            in_startup_grace = time.monotonic() - STARTED_AT < int(interval) * WAIT_TILL_MAKE_DECISION
+            if not power_value and in_startup_grace:
+                logger.info(f"{label}: heartbeat is stale, skipping offline decision during startup grace period")
+                continue
+
             changed = await record_event_if_changed(session=session, value=power_value, label=label)
 
             if changed:

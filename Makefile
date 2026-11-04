@@ -51,11 +51,17 @@ docker_stop:
 	docker compose stop
 
 # Pull latest code, apply migrations, rebuild and restart changed services.
+# pi_server goes first and we wait one Pi heartbeat interval (10s by default) before restarting the scheduler,
+# so it never reads a stale heartbeat left over from the restart and reports a false status change.
+HEARTBEAT_SETTLE_SECONDS ?= 15
+
 deploy:
 	git pull --ff-only
 	docker compose build
 	docker compose up -d postgres
 	docker compose run --rm bot alembic upgrade head
+	docker compose up -d --wait pi_server
+	sleep $(HEARTBEAT_SETTLE_SECONDS)
 	docker compose up -d
 
 # Also the first-time setup: migrations build the schema from an empty database.
