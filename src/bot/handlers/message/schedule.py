@@ -19,18 +19,20 @@ async def handle_schedule(update: Update, context: ContextTypes.DEFAULT_TYPE) ->
     )
     keyboard = get_main_keyboard(langpack)
 
+    log = logger.bind(username=u_identity)
+
     group = os.getenv("DTEK_GROUP")
     if not group:
-        logger.bind(username=u_identity).error("DTEK_GROUP is not set")
+        log.error("DTEK_GROUP is not set")
         await update.message.reply_text(langpack.MSG_SCHEDULE_UNAVAILABLE, reply_markup=keyboard)
         return
 
-    logger.bind(username=u_identity).info("📅 User requested schedule")
+    log.info("📅 User requested schedule")
 
     try:
-        schedule = await get_schedule(group)
+        schedule = await get_schedule(group, log)
     except Exception:
-        logger.bind(username=u_identity).exception("Failed to fetch DTEK schedule")
+        log.exception("Failed to fetch DTEK schedule")
         await update.message.reply_text(langpack.MSG_SCHEDULE_UNAVAILABLE, reply_markup=keyboard)
         return
 

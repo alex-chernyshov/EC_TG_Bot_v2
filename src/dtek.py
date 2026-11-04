@@ -5,6 +5,7 @@ from datetime import date, datetime
 from typing import NamedTuple
 
 import httpx
+from loguru._logger import Logger
 
 from src.bot.constants import KYIV_TZ
 from src.logger.main import logger
@@ -29,11 +30,12 @@ _last_failure = 0.0
 _lock = asyncio.Lock()
 
 
-async def get_schedule(group: str) -> Schedule:
+async def get_schedule(group: str, log: Logger = logger) -> Schedule:
     """Cached for CACHE_TTL_SECONDS and invalidated at Kyiv midnight. The entry is keyed by the day DTEK reports,
     so stale data served just after midnight is never treated as fresh.
 
-    If DTEK is unreachable, the last known schedule is returned (check `.day`); raises only when there is none."""
+    If DTEK is unreachable, the last known schedule is returned (check `.day`); raises only when there is none.
+    `log` is the caller's bound logger, so entries carry the requesting user."""
     global _last_failure
     async with _lock:  # one upstream request on expiry, not one per concurrent user
         cached = _cache.get(group)
@@ -45,7 +47,7 @@ async def get_schedule(group: str) -> Schedule:
             # After a failure keep serving stale data instead of making every click wait on a dead upstream.
             in_backoff = time.monotonic() - _last_failure < RETRY_BACKOFF_SECONDS
             if is_fresh or in_backoff:
-                logger.info(f"DTEK schedule from cache (group={group}, stale={not is_fresh})")
+                log.info(f"DTEK schedule from cache (group={group}, stale={not is_fresh})")
                 return schedule
         try:
             schedule = await _fetch_schedule(group)
@@ -53,9 +55,9 @@ async def get_schedule(group: str) -> Schedule:
             if not cached:
                 raise
             _last_failure = time.monotonic()
-            logger.exception("DTEK fetch failed, serving stale schedule")
+            log.exception("DTEK fetch failed, serving stale schedule")
             return cached[1]
-        logger.info(f"DTEK schedule from HTTP response (group={group})")
+        log.info(f"DTEK schedule from HTTP response (group={group})")
         _cache[group] = (time.monotonic(), schedule)
         return schedule
 
