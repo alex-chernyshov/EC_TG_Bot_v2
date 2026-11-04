@@ -33,6 +33,7 @@ class RULangPack(BaseLangPack):
     MSG_SCHEDULE_NO_OUTAGES = "Отключений не запланировано ✅"
     MSG_SCHEDULE_UPDATED = "Обновлено:"
     MSG_SCHEDULE_UNAVAILABLE = "⚠️ График пока недоступен. Пожалуйста, попробуйте позже."
+    MSG_SCHEDULE_SOURCE = "Данные получены с официального сайта ДТЭК"
     MSG_POWER_IS_ON = "🟢 *Электричество ЕСТЬ\\!* 🟢"
     MSG_POWER_IS_OFF = "🔴 *Электричества НЕТ* 🔴"
     MSG_POWER_TURN_ON_TIME = "📅 Время включения"

@@ -33,6 +33,7 @@ class UKLangPack(BaseLangPack):
     MSG_SCHEDULE_NO_OUTAGES = "Відключень не заплановано ✅"
     MSG_SCHEDULE_UPDATED = "Оновлено:"
     MSG_SCHEDULE_UNAVAILABLE = "⚠️ Графік наразі недоступний. Будь ласка, спробуйте пізніше."
+    MSG_SCHEDULE_SOURCE = "Дані отримано з офіційного сайту ДТЕК"
     MSG_POWER_IS_ON = "🟢 *Світло Є\\!* 🟢"
     MSG_POWER_IS_OFF = "🔴 *Світла НЕМАЄ* 🔴"
     MSG_POWER_TURN_ON_TIME = "📅 Час увімкнення"

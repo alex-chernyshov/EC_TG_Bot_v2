@@ -33,6 +33,7 @@ class ENLangPack(BaseLangPack):
     MSG_SCHEDULE_NO_OUTAGES = "No outages scheduled ✅"
     MSG_SCHEDULE_UPDATED = "Updated:"
     MSG_SCHEDULE_UNAVAILABLE = "⚠️ Schedule is currently unavailable. Please try again later."
+    MSG_SCHEDULE_SOURCE = "Data is fetched from the official DTEK website"
     MSG_POWER_IS_ON = "🟢 *Power is ON\\!* 🟢"
     MSG_POWER_IS_OFF = "🔴 *Power is OFF* 🔴"
     MSG_POWER_TURN_ON_TIME = "📅 Turn\\-on time"

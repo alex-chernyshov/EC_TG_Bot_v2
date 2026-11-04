@@ -35,6 +35,7 @@ class CSLangPack(BaseLangPack):
     MSG_SCHEDULE_NO_OUTAGES = "Žádné výpadky nejsou naplánovány ✅"
     MSG_SCHEDULE_UPDATED = "Aktualizováno:"
     MSG_SCHEDULE_UNAVAILABLE = "⚠️ Rozvrh je momentálně nedostupný. Zkuste to prosím později."
+    MSG_SCHEDULE_SOURCE = "Data jsou převzata z oficiálních stránek DTEK"
     MSG_POWER_IS_ON = "🟢 *Elektřina je ZAPNUTÁ\\!* 🟢"
     MSG_POWER_IS_OFF = "🔴 *Elektřina je VYPNUTÁ* 🔴"
     MSG_POWER_TURN_ON_TIME = "📅 Čas zapnutí"

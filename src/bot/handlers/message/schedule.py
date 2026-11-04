@@ -1,6 +1,8 @@
+import html
 import os
 
 from telegram import Update
+from telegram.constants import ParseMode
 from telegram.ext import ContextTypes
 
 from src.bot.keyboards import get_main_keyboard
@@ -43,4 +45,6 @@ async def handle_schedule(update: Update, context: ContextTypes.DEFAULT_TYPE) ->
         lines.append(langpack.MSG_SCHEDULE_NO_OUTAGES)
     lines += ["", f"{langpack.MSG_SCHEDULE_UPDATED} {schedule.updated}"]
 
-    await update.message.reply_text("\n".join(lines), reply_markup=keyboard)
+    body = html.escape("\n".join(lines))
+    text = f"{body}\n\n<i>{html.escape(langpack.MSG_SCHEDULE_SOURCE)}</i>"
+    await update.message.reply_text(text, reply_markup=keyboard, parse_mode=ParseMode.HTML)
