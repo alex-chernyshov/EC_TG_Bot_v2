@@ -55,8 +55,11 @@ async def poll_once(session_factory: async_sessionmaker[AsyncSession], interval:
         for label in list(Label):
             heartbeat = await get_heartbeat(session, label)
             if not heartbeat:
-                logger.warning(f'Heartbeat labeled as "{label}" not found')
-                return
+                logger.warning(f'Heartbeat labeled as "{label}" not found. Creating init heartbeat...')
+                # Epoch timestamp -> interpreted as offline until the first real heartbeat arrives
+                heartbeat = Heartbeat(label=label, timestamp=datetime.fromtimestamp(0, UTC))
+                session.add(heartbeat)
+                await session.commit()
 
             LAST_SEEN_TIMESTAMP = datetime.now(UTC)
             power_value = detect_power_value(
