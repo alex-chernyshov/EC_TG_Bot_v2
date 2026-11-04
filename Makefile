@@ -71,6 +71,9 @@ logs_compact:
 logs_all:
 	docker compose logs -f
 
+logs_bot:
+	docker compose logs -f bot
+
 logs-last-100:
 	docker compose logs --tail=100
 
