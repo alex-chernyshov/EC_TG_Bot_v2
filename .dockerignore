@@ -1,0 +1,16 @@
+# Secrets: config is passed at runtime via `env_file`, never baked into the image.
+.env
+.env.*
+
+# Local environments, caches, VCS, IDE
+.venv
+**/__pycache__
+.ruff_cache
+.git
+.idea
+.vscode
+.DS_Store
+
+# Not needed at runtime
+db_dumps
+docs

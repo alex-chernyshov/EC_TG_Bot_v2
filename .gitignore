@@ -231,3 +231,6 @@ cython_debug/
 
 db_dumps/*
 !db_dumps/.gitkeep
+
+# macOS Finder metadata
+.DS_Store

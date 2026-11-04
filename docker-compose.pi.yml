@@ -1,0 +1,20 @@
+# Runs on each Raspberry Pi: only the heartbeat sender. See README "Raspberry Pi setup".
+services:
+  pi_client:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+      args:
+        DEPS_GROUP: pi
+    image: ec_tg_bot_v2-pi_client
+    command: ["python", "entrypoints/start_pi_client.py"]
+    # Comes back after crashes and reboots (the Docker daemon starts on boot);
+    # stays down only after an explicit `make pi_down`.
+    restart: unless-stopped
+    env_file: .env
+    logging:
+      driver: json-file
+      options:
+        # Keep SD-card writes small.
+        max-size: "5m"
+        max-file: "2"
