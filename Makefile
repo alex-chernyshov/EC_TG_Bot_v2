@@ -64,6 +64,13 @@ deploy:
 	sleep $(HEARTBEAT_SETTLE_SECONDS)
 	docker compose up -d
 
+# Bot-only deploy: pull, rebuild the image and force-recreate just the bot container.
+# Skips migrations; scheduler and pi_server keep running on their current containers.
+deploy_bot:
+	git pull --ff-only
+	docker compose build bot
+	docker compose up -d --no-deps --force-recreate bot
+
 # Also the first-time setup: migrations build the schema from an empty database.
 docker_migrate:
 	docker compose run --rm bot alembic upgrade head
