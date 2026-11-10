@@ -1,7 +1,9 @@
 import asyncio
+from collections import Counter
 from typing import Any
 
 from aiolimiter import AsyncLimiter
+from telegram.error import Forbidden
 from telegram.ext import ContextTypes, Application
 from sqlalchemy import select, desc
 
@@ -183,10 +185,18 @@ async def check_and_send_notifications(context: ContextTypes.DEFAULT_TYPE) -> No
             return
 
         results = await asyncio.gather(*tasks, return_exceptions=True)
+        # Blocked/deactivated users are expected, so count them instead of logging an error per user
+        forbidden_reasons: Counter[str] = Counter()
         for task, result in zip(tasks, results):
-            if isinstance(result, Exception):
+            if isinstance(result, Forbidden):
+                forbidden_reasons[result.message.removeprefix("Forbidden: ")] += 1
+            elif isinstance(result, Exception):
                 user_id = task_user_ids.get(task, "unknown")
                 logger.error(f"Notification task failed for user_id={user_id}: {result!r}")
+
+        if forbidden_reasons:
+            reasons_text = ", ".join(f"{reason} ({count})" for reason, count in forbidden_reasons.most_common())
+            logger.info(f"Skipped {forbidden_reasons.total()} unreachable users: {reasons_text}")
 
         # Update last notified status ID
         _set_last_notified(latest_status.id, bot_data)
