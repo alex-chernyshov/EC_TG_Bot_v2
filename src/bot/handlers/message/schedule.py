@@ -30,7 +30,7 @@ async def handle_schedule(update: Update, context: ContextTypes.DEFAULT_TYPE) ->
         await update.message.reply_text(langpack.MSG_SCHEDULE_UNAVAILABLE, reply_markup=keyboard)
         return
 
-    log.info("📅 User requested schedule")
+    log.info("📒 User requested schedule")
 
     # Latest day up to today: if the scheduler couldn't fetch today's data yet, the last known day is shown
     # (the title carries its date).

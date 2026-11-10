@@ -26,7 +26,7 @@ class UKLangPack(BaseLangPack):
     MSG_GEN_SHOULD_BE_OFF = "⚠️ _Генератор працюэ, але, згідно з розкладом, його повинні *ВИМКНУТИ*\\!_"
     MSG_GEN_SHOULD_BE_ON = "⚠️ _Генератор не працюэ, але, згідно з розкладом, його повинні *УВIМКНУТИ*\\!_"
     MSG_POWER_STATUS_NOT_AVAILABLE = "⚠️ Інформація наразі недоступна. Будь ласка, спробуйте пізніше."
-    MSG_SCHEDULE_TITLE = "📅 Відключення на"
+    MSG_SCHEDULE_TITLE = "📒 Відключення на"
     MSG_SCHEDULE_NO_OUTAGES = "Відключень не заплановано ✅"
     MSG_SCHEDULE_UPDATED = "Оновлено:"
     MSG_SCHEDULE_UNAVAILABLE = "⚠️ Графік наразі недоступний. Будь ласка, спробуйте пізніше."

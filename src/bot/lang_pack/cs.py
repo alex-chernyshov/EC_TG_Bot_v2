@@ -28,7 +28,7 @@ class CSLangPack(BaseLangPack):
     MSG_GEN_SHOULD_BE_OFF = "⚠️ _Generátor běží, ale podle rozvrhu by měl být *VYPNUT*\\!_"
     MSG_GEN_SHOULD_BE_ON = "⚠️ _Generátor je vypnutý, ale podle rozvrhu by měl být *ZAPNUT*\\!_"
     MSG_POWER_STATUS_NOT_AVAILABLE = "⚠️ Informace jsou momentálně nedostupné. Zkuste to prosím později."
-    MSG_SCHEDULE_TITLE = "📅 Výpadky na"
+    MSG_SCHEDULE_TITLE = "📒 Výpadky na"
     MSG_SCHEDULE_NO_OUTAGES = "Žádné výpadky nejsou naplánovány ✅"
     MSG_SCHEDULE_UPDATED = "Aktualizováno:"
     MSG_SCHEDULE_UNAVAILABLE = "⚠️ Rozvrh je momentálně nedostupný. Zkuste to prosím později."

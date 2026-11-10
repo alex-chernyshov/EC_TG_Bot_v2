@@ -26,7 +26,7 @@ class RULangPack(BaseLangPack):
     MSG_GEN_TIME_TILL_OFF = "⏳ Согласно расписанию, до отключения:"
     MSG_GEN_TIME_TILL_ON = "⏳ Согласно расписанию, до включения:"
     MSG_POWER_STATUS_NOT_AVAILABLE = "⚠️ Информация пока недоступна. Пожалуйста, попробуйте позже."
-    MSG_SCHEDULE_TITLE = "📅 Отключения на"
+    MSG_SCHEDULE_TITLE = "📒 Отключения на"
     MSG_SCHEDULE_NO_OUTAGES = "Отключений не запланировано ✅"
     MSG_SCHEDULE_UPDATED = "Обновлено:"
     MSG_SCHEDULE_UNAVAILABLE = "⚠️ График пока недоступен. Пожалуйста, попробуйте позже."

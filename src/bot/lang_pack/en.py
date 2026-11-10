@@ -26,7 +26,7 @@ class ENLangPack(BaseLangPack):
     MSG_GEN_SHOULD_BE_OFF = "⚠️ _The generator is running, but according to the schedule, it should be turned *OFF*\\!_"
     MSG_GEN_SHOULD_BE_ON = "⚠️ _The generator is turned off, but according to the schedule, it should be turned *ON*\\!_"
     MSG_POWER_STATUS_NOT_AVAILABLE = "⚠️ Information is currently unavailable. Please try again later."
-    MSG_SCHEDULE_TITLE = "📅 Outages for"
+    MSG_SCHEDULE_TITLE = "📒 Outages for"
     MSG_SCHEDULE_NO_OUTAGES = "No outages scheduled ✅"
     MSG_SCHEDULE_UPDATED = "Updated:"
     MSG_SCHEDULE_UNAVAILABLE = "⚠️ Schedule is currently unavailable. Please try again later."
