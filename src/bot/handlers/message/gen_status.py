@@ -1,3 +1,4 @@
+import os
 from datetime import datetime
 
 from sqlalchemy import select, desc
@@ -70,6 +71,15 @@ async def handle_gen_status(update: Update, context: ContextTypes.DEFAULT_TYPE) 
         logger.bind(username=u_identity).info(
             f"Retrieved latest [{gen_label}] status value={latest_gen_status.value}, date_created={latest_gen_status.date_created.isoformat()}"
         )
+
+    if os.getenv("GEN_SCHEDULE_ENABLED", "").strip().lower() not in {"1", "true", "yes", "on"}:
+        # Generator has no fixed schedule now: report the actual state only
+        await update.message.reply_text(
+            langpack.MSG_GEN_ON if latest_gen_status.value else langpack.MSG_GEN_OFF,
+            reply_markup=get_main_keyboard(langpack),
+            parse_mode=ParseMode.MARKDOWN_V2,
+        )
+        return
 
     curr_time = datetime.now(KYIV_TZ)
     sched_status = get_generator_schedule_status(curr_time)
