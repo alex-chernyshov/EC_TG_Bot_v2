@@ -72,10 +72,16 @@ async def handle_gen_status(update: Update, context: ContextTypes.DEFAULT_TYPE) 
             f"Retrieved latest [{gen_label}] status value={latest_gen_status.value}, date_created={latest_gen_status.date_created.isoformat()}"
         )
 
+    # Statuses are inserted only on change, so the latest row's time is when the generator switched
+    gen_state_text = langpack.MSG_GEN_ON if latest_gen_status.value else langpack.MSG_GEN_OFF
+    switch_label_text = langpack.MSG_POWER_TURN_ON_TIME if latest_gen_status.value else langpack.MSG_POWER_TURN_OFF_TIME
+    switch_time = latest_gen_status.date_created.astimezone(KYIV_TZ)
+    gen_status_text = f"{gen_state_text}\n\n{switch_label_text}\n{switch_time:%H:%M %d\\.%m\\.%Y}"
+
     if os.getenv("GEN_SCHEDULE_ENABLED", "").strip().lower() not in {"1", "true", "yes", "on"}:
         # Generator has no fixed schedule now: report the actual state only
         await update.message.reply_text(
-            langpack.MSG_GEN_ON if latest_gen_status.value else langpack.MSG_GEN_OFF,
+            gen_status_text,
             reply_markup=get_main_keyboard(langpack),
             parse_mode=ParseMode.MARKDOWN_V2,
         )
@@ -101,24 +107,24 @@ async def handle_gen_status(update: Update, context: ContextTypes.DEFAULT_TYPE) 
 
     if latest_gen_status.value and sched_status:
         # Generator is actually turned ON and running on schedule
-        message = f"{langpack.MSG_GEN_ON}\n\n{langpack.MSG_GEN_TIME_TILL_OFF} {next_switch_sub_text}"
+        message = f"{gen_status_text}\n\n{langpack.MSG_GEN_TIME_TILL_OFF} {next_switch_sub_text}"
     elif latest_gen_status.value and not sched_status:
         # Generator is actually turned ON but according to schedule it should be OFF
         message = (
-            f"{langpack.MSG_GEN_ON}\n\n"
+            f"{gen_status_text}\n\n"
             f"{langpack.MSG_GEN_SHOULD_BE_OFF}\n\n"
             f"{langpack.MSG_GEN_TIME_TILL_ON} {next_switch_sub_text}"
         )
     elif not latest_gen_status.value and sched_status:
         # Generator is actually OFF but according to schedule it should be ON
         message = (
-            f"{langpack.MSG_GEN_OFF}\n\n"
+            f"{gen_status_text}\n\n"
             f"{langpack.MSG_GEN_SHOULD_BE_ON}\n\n"
             f"{langpack.MSG_GEN_TIME_TILL_OFF} {next_switch_sub_text}"
         )
     elif not latest_gen_status.value and not sched_status:
         # Generator is actually OFF and schedule said it should be OFF
-        message = f"{langpack.MSG_GEN_OFF}\n\n{langpack.MSG_GEN_TIME_TILL_ON} {next_switch_sub_text}"
+        message = f"{gen_status_text}\n\n{langpack.MSG_GEN_TIME_TILL_ON} {next_switch_sub_text}"
     else:
         logger.bind(username=u_identity).error("Somehow no generator business logic case match")
         message = "Error"
