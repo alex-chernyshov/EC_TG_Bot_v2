@@ -3,19 +3,25 @@ from telegram.ext import (
     ContextTypes,
 )
 
-from src.bot.keyboards import get_notification_choice_keyboard
+from src.bot.keyboards import get_settings_keyboard
 from src.bot.lang_pack.base import BaseLangPack
-from src.bot.utils import get_user_identity_from_update, button_rate_limited, registered_only
+from src.bot.utils import (
+    get_user_identity_from_update,
+    get_user_from_db,
+    get_settings_summary,
+    button_rate_limited,
+    registered_only,
+)
 from src.logger.main import logger
 
 
 @button_rate_limited
 @registered_only
 async def handle_settings(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
-    """Handle 'Notification settings' button - allow user to reconfigure notification preferences."""
+    """Handle 'Settings' button - show current settings with a button to reconfigure them."""
     user = update.effective_user
     if user is None:
-        logger.warning("Received reconfigure setting request but effective_user is None")
+        logger.warning("Received settings request but effective_user is None")
         return
 
     u_identity = get_user_identity_from_update(update)
@@ -24,21 +30,20 @@ async def handle_settings(update: Update, context: ContextTypes.DEFAULT_TYPE) ->
 
     session_factory = context.application.bot_data["session_factory"]
     if session_factory is None:
-        logger.bind(username=u_identity).error("Session factory not initialized in handle_get_status")
+        logger.bind(username=u_identity).error("Session factory not initialized in handle_settings")
         await update.message.reply_text(langpack.ERR_BOT_NOT_INITIALIZED)
         return
 
-    logger.bind(username=u_identity).info("⚙️  User requested to reconfigure notification settings")
+    db_user = await get_user_from_db(session_factory, user.id)
+    if db_user is None:
+        logger.bind(username=u_identity).error("User not found in db during settings request")
+        await update.message.reply_text(langpack.ERR_USER_NOT_FOUND)
+        return
 
-    # Start the notification preference flow (reuse registration flow)
+    logger.bind(username=u_identity).info("⚙️  User requested current settings")
+
+    summary = get_settings_summary(langpack, db_user.notifs_enabled, db_user.night_notif_sound_enabled)
     await update.message.reply_text(
-        langpack.MSG_Q_ENABLE_NOTIFS,
-        reply_markup=get_notification_choice_keyboard(langpack),
-    )
-
-    # Store user_id in context for callback handlers (same as registration flow)
-    context.user_data["registering_user_id"] = user.id
-    context.user_data["is_reconfiguration"] = True  # Mark as reconfiguration
-    logger.bind(username=u_identity).info(
-        "Started notification settings reconfiguration - waiting for notification preference..."
+        f"{langpack.MSG_CURRENT_SETTINGS}\n\n{summary}\n\n{langpack.MSG_RECONFIGURE_HINT}",
+        reply_markup=get_settings_keyboard(langpack),
     )

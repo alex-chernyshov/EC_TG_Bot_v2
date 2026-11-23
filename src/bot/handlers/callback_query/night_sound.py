@@ -65,5 +65,6 @@ async def handle_night_sound_choice(update: Update, context: ContextTypes.DEFAUL
         langpack, is_reconfiguration, notifications_enabled=True, night_sound_enabled=night_sound_enabled
     )
     await query.edit_message_text(completion_text)
-    await query.message.reply_text(langpack.MSG_USE_KEYBOARD, reply_markup=get_main_keyboard(langpack))
+    if not is_reconfiguration:
+        await query.message.reply_text(langpack.MSG_USE_KEYBOARD, reply_markup=get_main_keyboard(langpack))
     await cleanup_registration_context(context, u_identity)
