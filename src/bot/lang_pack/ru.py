@@ -37,7 +37,7 @@ class RULangPack(BaseLangPack):
     MSG_POWER_TURN_ON_TIME = "📅 Время включения"
     MSG_POWER_TURN_OFF_TIME = "📅 Время отключения"
     MSG_REPORT_ERROR = (
-        "Если у Вас что\\-то не работает, то напишите мне в личку, все починим и настроим 🤝\n\n@AlexFoxalt"
+        "Если у Вас что-то не работает, то напишите мне в личку, все починим и настроим 🤝\n\n@AlexFoxalt"
     )
     MSG_USER_NOT_FOUND = "Пользователь не найден. Пожалуйста, используйте команду /start для регистрации."
     MSG_REGISTRATION_COMPLETED = "Регистрация завершена 🎉"
