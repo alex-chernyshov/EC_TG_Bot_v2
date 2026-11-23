@@ -179,6 +179,20 @@ async def get_user_from_db(session_factory: async_sessionmaker, user_id: int) ->
         return result.scalar_one_or_none()
 
 
+def get_settings_summary(langpack: BaseLangPack, notifications_enabled: bool, night_sound_enabled: bool | None) -> str:
+    """One line per setting, shared by Settings display and reconfiguration completion."""
+
+    def on_off(enabled: bool) -> str:
+        return langpack.WORD_ENABLED_LOWER if enabled else langpack.WORD_DISABLED_LOWER
+
+    lines = [f"{langpack.MSG_SETTING_NOTIFS} {on_off(notifications_enabled)}"]
+    if notifications_enabled and night_sound_enabled is not None:
+        # Night sound only matters when notifications are enabled
+        lines.append(f"🌙 {langpack.MSG_NOTIF_NIGHT_SOUND}: {on_off(night_sound_enabled)}")
+    lines.append(f"{langpack.MSG_SETTING_LANGUAGE} {langpack.LANG_NAME} {langpack.MSG_LANGUAGE_FOLLOWS_TG}")
+    return "\n".join(lines)
+
+
 def get_completion_message(
     langpack: BaseLangPack,
     is_reconfiguration: bool,
@@ -186,23 +200,9 @@ def get_completion_message(
     night_sound_enabled: bool | None = None,
 ) -> str:
     """Get completion message based on flow type and settings."""
-    if not notifications_enabled:
-        return (
-            langpack.MSG_NOTIFS_DISABLED
-            if is_reconfiguration
-            else f"{langpack.MSG_NOTIFS_DISABLED}\n\n{langpack.MSG_REGISTRATION_COMPLETED}"
-        )
-
-    if night_sound_enabled is not None:
-        sound_status = langpack.WORD_ENABLED_LOWER if night_sound_enabled else langpack.WORD_DISABLED_LOWER
-        emoji = "🔊" if night_sound_enabled else "🔇"
-        return (
-            f"{langpack.MSG_NOTIF_NIGHT_SOUND} {sound_status} {emoji}\n\n{langpack.MSG_SETTINGS_UPDATED}"
-            if is_reconfiguration
-            else f"{langpack.MSG_NOTIF_NIGHT_SOUND} {sound_status} {emoji}\n\n{langpack.MSG_REGISTRATION_COMPLETED}"
-        )
-
-    return ""
+    title = langpack.MSG_SETTINGS_UPDATED if is_reconfiguration else langpack.MSG_REGISTRATION_COMPLETED
+    summary = get_settings_summary(langpack, notifications_enabled, night_sound_enabled)
+    return f"{title}:\n\n{summary}"
 
 
 def build_button_pattern(attr: str, languages: list[BaseLangPack]) -> str:

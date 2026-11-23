@@ -59,7 +59,7 @@ Four independent processes share one Postgres database. They communicate only th
 - Shared state lives in `app.bot_data`, set up in `start_bot()`: `session_factory`, `rate_limiter` (aiolimiter), `semaphore`, `languages`, and the per-user button rate-limit buckets. Handlers read their dependencies from there.
 - **Routing by button text:** reply-keyboard buttons are matched with a regex built from that button's text in every language pack (`build_button_pattern`). Renaming a `BTN_*` string in a lang pack automatically changes routing.
 - Message handlers for keyboard buttons are wrapped in `@button_rate_limited` (`src/bot/utils.py`).
-- Registration and settings use inline callbacks (`notif_yes|no`, then `night_sound_yes|no`) plus `context.user_data["registering_user_id"]` / `["is_reconfiguration"]`. `/settings` reuses the registration flow.
+- Registration and settings use inline callbacks (`notif_yes|no`, then `night_sound_yes|no`) plus `context.user_data["registering_user_id"]` / `["is_reconfiguration"]`. The Settings button first shows current settings; its "Change settings" inline button (`settings_reconfigure`) then reuses the registration flow.
 - Outgoing broadcasts go through `send_message_with_retry` (tenacity retries, semaphore, rate limiter). It defaults to **MarkdownV2**, so literal `.`, `!`, `-` and similar characters in notification/lang strings must be escaped (`\\.`).
 - `/msgAll <text>` is an admin-only broadcast, gated by `users.is_admin`, and is sent as plain text.
 - At night (22:00–08:00 Kyiv), notifications are sent silently for users with `night_notif_sound_enabled = False`.

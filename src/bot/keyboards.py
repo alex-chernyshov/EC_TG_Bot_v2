@@ -6,8 +6,10 @@ from src.bot.lang_pack.base import BaseLangPack
 def get_main_keyboard(langpack: BaseLangPack) -> ReplyKeyboardMarkup:
     """Get the main persistent keyboard for registered users."""
     keyboard = [
-        [KeyboardButton(langpack.BTN_POWER_STATUS, api_kwargs={"style": "primary"})],
-        [KeyboardButton(langpack.BTN_GEN_STATUS, api_kwargs={"style": "primary"})],
+        [
+            KeyboardButton(langpack.BTN_POWER_STATUS, api_kwargs={"style": "primary"}),
+            KeyboardButton(langpack.BTN_GEN_STATUS, api_kwargs={"style": "primary"}),
+        ],
         [KeyboardButton(langpack.BTN_SCHEDULE, api_kwargs={"style": "primary"})],
         [
             KeyboardButton(langpack.BTN_SETTINGS),
@@ -34,6 +36,12 @@ def get_night_sound_choice_keyboard(langpack: BaseLangPack) -> InlineKeyboardMar
 def get_night_sound_options_text(langpack: BaseLangPack) -> str:
     """Numbered explanation of the night sound keyboard buttons."""
     return f"1️⃣ {langpack.OPT_NIGHT_SOUND_ON}\n2️⃣ {langpack.OPT_NIGHT_SOUND_OFF}"
+
+
+def get_settings_keyboard(langpack: BaseLangPack) -> InlineKeyboardMarkup:
+    """Get inline keyboard under the current settings summary."""
+    keyboard = [[InlineKeyboardButton(langpack.INLINE_BTN_RECONFIGURE, callback_data="settings_reconfigure")]]
+    return InlineKeyboardMarkup(keyboard)
 
 
 def get_notification_choice_keyboard(langpack: BaseLangPack) -> InlineKeyboardMarkup:

@@ -12,6 +12,7 @@ class RULangPack(BaseLangPack):
     OPT_NIGHT_SOUND_OFF = "🔇 Тихо ночью (без звука)"
     INLINE_BTN_YES = "Да"
     INLINE_BTN_NO = "Нет"
+    INLINE_BTN_RECONFIGURE = "✏️ Изменить настройки"
 
     MSG_USE_KEYBOARD = "Используйте клавиатуру ниже для взаимодействия с ботом 👇"
     MSG_NOTIFICATIONS_ON = "Отлично! Уведомления включены. 🔔\n\nВыберите, как будут приходить ночные уведомления (с 22:00 до 08:00).\nВ беззвучном режиме они всё равно придут, просто без звука:"
@@ -39,12 +40,16 @@ class RULangPack(BaseLangPack):
         "Если у Вас что\\-то не работает, то напишите мне в личку, все починим и настроим 🤝\n\n@AlexFoxalt"
     )
     MSG_USER_NOT_FOUND = "Пользователь не найден. Пожалуйста, используйте команду /start для регистрации."
-    MSG_NOTIFS_DISABLED = "Уведомления отключены. Вы можете изменить это позже."
-    MSG_REGISTRATION_COMPLETED = "Регистрация завершена! Теперь Вы можете использовать бота 🎉"
+    MSG_REGISTRATION_COMPLETED = "Регистрация завершена 🎉"
     MSG_NOTIF_NIGHT_SOUND = "Звуковое оповещение в ночное время"
     MSG_SETTINGS_UPDATED = "Настройки обновлены ✅"
     MSG_TIME_SINCE_SHUTDOWN = "⏳ С момента отключения прошло"
     MSG_TIME_SINCE_POWER_ON = "⏳ С момента включения прошло"
+    MSG_CURRENT_SETTINGS = "⚙️ Ваши текущие настройки:"
+    MSG_SETTING_NOTIFS = "🔔 Уведомления:"
+    MSG_SETTING_LANGUAGE = "🌐 Язык:"
+    MSG_LANGUAGE_FOLLOWS_TG = "(соответствует языку вашего приложения Telegram)"
+    MSG_RECONFIGURE_HINT = "Чтобы изменить их, нажмите кнопку ниже 👇"
 
     NOTIF_ATTENTION = "📢️  *ВНИМАНИЕ*  📢"
     NOTIF_POWER_TURN_ON_TIME = "⏳Свет был"
@@ -60,6 +65,7 @@ class RULangPack(BaseLangPack):
     WORD_POWER = "Электричество"
     WORD_ENABLED_LOWER = "включено"
     WORD_DISABLED_LOWER = "выключено"
+    LANG_NAME = "русский"
 
     ERR_BOT_NOT_INITIALIZED = "Бот некорректно инициализирован. Пожалуйста, свяжитесь с администратором."
     ERR_USER_NOT_FOUND = "Пользователь не найден. Пожалуйста, используйте команду /start еще раз."
